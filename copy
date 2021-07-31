@@ -7,19 +7,19 @@ const { argv } = require('yargs')
   .alias('u', 'update')
   .describe('u', '不使用本地緩存，強制從線上獲取源文件夾信息')
   .alias('y', 'yes')
-  .describe('yes', '若发現拷貝記錄，不詢問直接繼續上次的進度')
+  .describe('yes', '若发現複製記錄，不詢問直接繼續上次的進度')
   .alias('f', 'file')
-  .describe('f', '覆制單個文件')
+  .describe('f', '複製單個文件')
   .alias('n', 'name')
   .describe('n', '給目標文件夾重命名，不填則保留原始目錄名')
   .alias('N', 'not_teamdrive')
-  .describe('N', '如果不是團隊盤鏈接，可以加上此參數以提高接口查詢效率，降低延遲')
+  .describe('N', '如果不是團隊盤連結，可以加上此參數以提高接口查詢效率，降低延遲')
   .alias('s', 'size')
-  .describe('s', '不填默認拷貝全部文件，如果設置了這個值，則過濾掉小於這個size的文件，必須以b結尾，比如10mb')
+  .describe('s', '不填默認複製全部文件，如果設置了這個值，則過濾掉小於這個size的文件，必須以b結尾，比如10mb')
   .alias('S', 'service_account')
   .describe('S', '指定使用service account進行操作，前提是必須在 ./sa 目錄下放置json授權文件，請確保sa帳號擁有操作權限。')
   .alias('D', 'dncnr')
-  .describe('D', 'do not create new root, 不在目的地創建同名文件夾，直接將源文件夾中的文件原樣覆制到目的文件夾中')
+  .describe('D', 'do not create new root, 不在目的地創建同名文件夾，直接將源文件夾中的文件原樣複製到目的文件夾中')
   .help('h')
   .alias('h', 'help')
 
@@ -40,13 +40,13 @@ if (validate_fid(source)) {
   }
   let min_size
   if (size) {
-    console.log(`不覆制大小低於 ${size} 的文件`)
+    console.log(`不複製大小低於 ${size} 的文件`)
     min_size = bytes.parse(size)
   }
   copy({ source, target, name, min_size, update, not_teamdrive, service_account, dncnr }).then(folder => {
     if (!folder) return
     const link = 'https://drive.google.com/drive/folders/' + folder.id
-    console.log('\n任務完成，新文件夾鏈接：\n', link)
+    console.log('\n任務完成，新文件夾連結：\n', link)
   })
 } else {
   console.warn('目錄ID缺失或格式錯誤')
