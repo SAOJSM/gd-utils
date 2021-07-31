@@ -9,7 +9,7 @@ const { AUTH, DEFAULT_TARGET, USE_PERSONAL_AUTH } = require('../config')
 const { tg_token } = AUTH
 const gen_link = (fid, text) => `<a href="https://drive.google.com/drive/folders/${fid}">${text || fid}</a>`
 
-if (!tg_token) throw new Error('请先在config.js里设置tg_token')
+if (!tg_token) throw new Error('請先在config.js裡設置tg_token')
 const { https_proxy } = process.env
 const axins = axios.create(https_proxy ? { httpsAgent: new HttpsProxyAgent(https_proxy) } : {})
 
@@ -23,59 +23,59 @@ async function get_folder_name (fid) {
 }
 
 function send_help (chat_id) {
-  const text = `<pre>[使用帮助]
-命令 ｜ 说明
+  const text = `<pre>[使用幫助]
+命令 ｜ 說明
 =====================
-/help | 返回本条使用说明
+/help | 使用說明
 =====================
-/reload | 重启进程，中断所有进行中的任务(前提是进程由pm2守护)
+/reload | 重啟進程，中斷所有進行中的任務(前提是進程由pm2守護)
 =====================
-/count shareID [-u] | 返回sourceID的文件统计信息
-sourceID可以是google drive分享网址本身，也可以是分享ID。如果命令最后加上 -u，则无视之前的记录强制从线上获取，适合一段时候后才更新完毕的分享链接。
+/count shareID [-u] | 返回sourceID的文件統計訊息
+sourceID可以是google drive分享網址本身，也可以是分享ID。如果命令最後加上 -u，則無視之前的記錄強制從線上獲取，適合一段時候後才更新完畢的分享連結。
 =====================
-/copy sourceID targetID [-u] | 将sourceID的文件复制到targetID里（会新建一个文件夹）
-若不填targetID，则会复制到默认位置（在config.js里设置）。
-如果设置了bookmark，那么targetID可以是bookmark的别名。
-如果命令最后加上 -u，则无视本地缓存强制从线上获取源文件夹信息。
-命令开始执行后会回复此次任务的taskID。
+/copy sourceID targetID [-u] | 將sourceID的文件複製到targetID裡（會新建一個文件夾）
+若不填targetID，則會複製到默認位置（在config.js裡設置）。
+如果設置了bookmark，那麽targetID可以是bookmark的別名。
+如果命令最後加上 -u，則無視本地緩存強制從線上獲取源文件夾訊息。
+命令開始執行後會回覆此次任務的taskID。
 =====================
-/task | 返回对应任务的进度信息
+/task | 返回對應任務的進度訊息
 用例：
-/task | 返回所有正在运行的任务详情
-/task 7 | 返回编号为 7 的任务详情
-/task all | 返回所有任务记录列表
-/task clear | 清除所有状态为已完成的任务记录
-/task rm 7 | 删除编号为 7 的任务记录
+/task | 返回所有正在執行的任務詳情
+/task 7 | 返回編號為 7 的任務詳情
+/task all | 返回所有任務記錄列表
+/task clear | 清除所有狀態為已完成的任務記錄
+/task rm 7 | 刪除編號為 7 的任務記錄
 =====================
-/bm [action] [alias] [target] | bookmark，添加常用目的文件夹ID
-会在输入网址后返回的「文件统计」「开始复制」这两个按钮的下方出现，方便复制到常用位置。
+/bm [action] [alias] [target] | bookmark，添加常用目的文件夾ID
+會在輸入網址後返回的「文件統計」「開始複製」這兩個按鈕的下方出現，方便複製到常用位置。
 用例：
-/bm | 返回所有设置的收藏夹
-/bm set movie folder-id | 将folder-id添加到收藏夹，别名设为movie
-/bm unset movie | 删除此收藏夹
+/bm | 返回所有設置的收藏夾
+/bm set movie folder-id | 將folder-id添加到收藏夾，別名設為movie
+/bm unset movie | 刪除此收藏夾
 </pre>`
   return sm({ chat_id, text, parse_mode: 'HTML' })
 }
 
 function send_bm_help (chat_id) {
-  const text = `<pre>/bm [action] [alias] [target] | bookmark，添加常用目的文件夹ID
-会在输入网址后返回的「文件统计」「开始复制」这两个按钮的下方出现，方便复制到常用位置。
+  const text = `<pre>/bm [action] [alias] [target] | bookmark，添加常用目的文件夾ID
+會在輸入網址後返回的「文件統計」「開始複製」這兩個按鈕的下方出現，方便複製到常用位置。
 用例：
-/bm | 返回所有设置的收藏夹
-/bm set movie folder-id | 将folder-id添加到收藏夹，别名设为movie
-/bm unset movie | 删除此收藏夹
+/bm | 返回所有設置的收藏夾
+/bm set movie folder-id | 將folder-id添加到收藏夾，別名設為movie
+/bm unset movie | 刪除此收藏夾
 </pre>`
   return sm({ chat_id, text, parse_mode: 'HTML' })
 }
 
 function send_task_help (chat_id) {
-  const text = `<pre>/task [action/id] [id] | 查询或管理任务进度
+  const text = `<pre>/task [action/id] [id] | 查詢或管理任務進度
 用例：
-/task | 返回所有正在运行的任务详情
-/task 7 | 返回编号为 7 的任务详情
-/task all | 返回所有任务记录列表
-/task clear | 清除所有状态为已完成的任务记录
-/task rm 7 | 删除编号为 7 的任务记录
+/task | 返回所有正在執行的任務詳情
+/task 7 | 返回編號為 7 的任務詳情
+/task all | 返回所有任務記錄列表
+/task clear | 清除所有狀態為已完成的任務記錄
+/task rm 7 | 刪除編號為 7 的任務記錄
 </pre>`
   return sm({ chat_id, text, parse_mode: 'HTML' })
 }
@@ -83,22 +83,22 @@ function send_task_help (chat_id) {
 function clear_tasks (chat_id) {
   const finished_tasks = db.prepare('select id from task where status=?').all('finished')
   finished_tasks.forEach(task => rm_task({ task_id: task.id }))
-  sm({ chat_id, text: '已清除所有状态为已完成的任务记录' })
+  sm({ chat_id, text: '已清除所有狀態為已完成的任務記錄' })
 }
 
 function rm_task ({ task_id, chat_id }) {
   const exist = db.prepare('select id from task where id=?').get(task_id)
-  if (!exist) return sm({ chat_id, text: `不存在编号为 ${task_id} 的任务记录` })
+  if (!exist) return sm({ chat_id, text: `不存在編號為 ${task_id} 的任務記錄` })
   db.prepare('delete from task where id=?').run(task_id)
   db.prepare('delete from copied where taskid=?').run(task_id)
-  if (chat_id) sm({ chat_id, text: `已删除任务 ${task_id} 记录` })
+  if (chat_id) sm({ chat_id, text: `已刪除任務 ${task_id} 記錄` })
 }
 
 function send_all_bookmarks (chat_id) {
   let records = db.prepare('select alias, target from bookmark').all()
-  if (!records.length) return sm({ chat_id, text: '数据库中没有收藏记录' })
+  if (!records.length) return sm({ chat_id, text: '數據庫中沒有收藏記錄' })
   const tb = new Table({ style: { head: [], border: [] } })
-  const headers = ['别名', '目录ID']
+  const headers = ['別名', '目錄ID']
   records = records.map(v => [v.alias, v.target])
   tb.push(headers, ...records)
   const text = tb.toString().replace(/─/g, '—')
@@ -107,16 +107,16 @@ function send_all_bookmarks (chat_id) {
 
 function set_bookmark ({ chat_id, alias, target }) {
   const record = db.prepare('select alias from bookmark where alias=?').get(alias)
-  if (record) return sm({ chat_id, text: '数据库中已有同名的收藏' })
+  if (record) return sm({ chat_id, text: '數據庫中已有同名的收藏' })
   db.prepare('INSERT INTO bookmark (alias, target) VALUES (?, ?)').run(alias, target)
-  return sm({ chat_id, text: `成功设置收藏：${alias} | ${target}` })
+  return sm({ chat_id, text: `成功設置收藏：${alias} | ${target}` })
 }
 
 function unset_bookmark ({ chat_id, alias }) {
   const record = db.prepare('select alias from bookmark where alias=?').get(alias)
-  if (!record) return sm({ chat_id, text: '未找到此别名的收藏' })
+  if (!record) return sm({ chat_id, text: '未找到此別名的收藏' })
   db.prepare('delete from bookmark where alias=?').run(alias)
-  return sm({ chat_id, text: '成功删除收藏 ' + alias })
+  return sm({ chat_id, text: '成功刪除收藏 ' + alias })
 }
 
 function get_target_by_alias (alias) {
@@ -132,16 +132,16 @@ function get_alias_by_target (target) {
 function send_choice ({ fid, chat_id }) {
   return sm({
     chat_id,
-    text: `识别出分享ID ${fid}，请选择动作`,
+    text: `辨識出分享ID ${fid}，請選擇動作`,
     reply_markup: {
       inline_keyboard: [
         [
-          { text: '文件统计', callback_data: `count ${fid}` },
-          { text: '开始复制', callback_data: `copy ${fid}` }
+          { text: '文件統計', callback_data: `count ${fid}` },
+          { text: '開始複製', callback_data: `copy ${fid}` }
         ],
         [
-          { text: '强制刷新', callback_data: `update ${fid}` },
-          { text: '清除按钮', callback_data: `clear_button` }
+          { text: '強制刷新', callback_data: `update ${fid}` },
+          { text: '清除按鈕', callback_data: `clear_button` }
         ]
       ].concat(gen_bookmark_choices(fid))
     }
@@ -150,7 +150,7 @@ function send_choice ({ fid, chat_id }) {
 
 // console.log(gen_bookmark_choices())
 function gen_bookmark_choices (fid) {
-  const gen_choice = v => ({ text: `复制到 ${v.alias}`, callback_data: `copy ${fid} ${v.alias}` })
+  const gen_choice = v => ({ text: `複製到 ${v.alias}`, callback_data: `copy ${fid} ${v.alias}` })
   const records = db.prepare('select * from bookmark').all()
   const result = []
   for (let i = 0; i < records.length; i += 2) {
@@ -163,7 +163,7 @@ function gen_bookmark_choices (fid) {
 
 async function send_all_tasks (chat_id) {
   let records = db.prepare('select id, status, ctime from task').all()
-  if (!records.length) return sm({ chat_id, text: '数据库中没有任务记录' })
+  if (!records.length) return sm({ chat_id, text: '數據庫中沒有任務記錄' })
   const tb = new Table({ style: { head: [], border: [] } })
   const headers = ['ID', 'status', 'ctime']
   records = records.map(v => {
@@ -176,13 +176,13 @@ async function send_all_tasks (chat_id) {
   return axins.post(url, {
     chat_id,
     parse_mode: 'HTML',
-    text: `所有拷贝任务：\n<pre>${text}</pre>`
+    text: `所有複製任務：\n<pre>${text}</pre>`
   }).catch(err => {
     console.error(err.message)
     // const description = err.response && err.response.data && err.response.data.description
     // if (description && description.includes('message is too long')) {
     const text = [headers].concat(records.slice(-100)).map(v => v.join('\t')).join('\n')
-    return sm({ chat_id, parse_mode: 'HTML', text: `所有拷贝任务(只显示最近100条)：\n<pre>${text}</pre>` })
+    return sm({ chat_id, parse_mode: 'HTML', text: `所有複製任務(只顯示最近100條)：\n<pre>${text}</pre>` })
   })
 }
 
@@ -197,24 +197,24 @@ async function get_task_info (task_id) {
   const { file_count, folder_count, total_size } = summary ? JSON.parse(summary) : {}
   const total_count = (file_count || 0) + (folder_count || 0)
   const copied_folders = folder_mapping ? (folder_mapping.length - 1) : 0
-  let text = '任务编号：' + task_id + '\n'
+  let text = '任務編號：' + task_id + '\n'
   const folder_name = await get_folder_name(source)
-  text += '源文件夹：' + gen_link(source, folder_name) + '\n'
+  text += '源文件夾：' + gen_link(source, folder_name) + '\n'
   text += '目的位置：' + gen_link(target, get_alias_by_target(target)) + '\n'
-  text += '新文件夹：' + (new_folder ? gen_link(new_folder) : '暂未创建') + '\n'
-  text += '任务状态：' + status + '\n'
-  text += '创建时间：' + dayjs(ctime).format('YYYY-MM-DD HH:mm:ss') + '\n'
-  text += '完成时间：' + (ftime ? dayjs(ftime).format('YYYY-MM-DD HH:mm:ss') : '未完成') + '\n'
-  text += '目录进度：' + copied_folders + '/' + (folder_count === undefined ? '未知数量' : folder_count) + '\n'
-  text += '文件进度：' + copied_files + '/' + (file_count === undefined ? '未知数量' : file_count) + '\n'
-  text += '总百分比：' + ((copied_files + copied_folders) * 100 / total_count).toFixed(2) + '%\n'
-  text += '合计大小：' + (total_size || '未知大小')
+  text += '新文件夾：' + (new_folder ? gen_link(new_folder) : '暫未建立') + '\n'
+  text += '任務狀態：' + status + '\n'
+  text += '建立時間：' + dayjs(ctime).format('YYYY-MM-DD HH:mm:ss') + '\n'
+  text += '完成時間：' + (ftime ? dayjs(ftime).format('YYYY-MM-DD HH:mm:ss') : '未完成') + '\n'
+  text += '目錄進度：' + copied_folders + '/' + (folder_count === undefined ? '未知數量' : folder_count) + '\n'
+  text += '文件進度：' + copied_files + '/' + (file_count === undefined ? '未知數量' : file_count) + '\n'
+  text += '總百分比：' + ((copied_files + copied_folders) * 100 / total_count).toFixed(2) + '%\n'
+  text += '合計大小：' + (total_size || '未知大小')
   return { text, status, folder_count }
 }
 
 async function send_task_info ({ task_id, chat_id }) {
   const { text, status, folder_count } = await get_task_info(task_id)
-  if (!text) return sm({ chat_id, text: '数据库不存在此任务ID：' + task_id })
+  if (!text) return sm({ chat_id, text: '數據庫不存在此任務ID：' + task_id })
   const url = `https://api.telegram.org/bot${tg_token}/sendMessage`
   let message_id
   try {
@@ -223,7 +223,7 @@ async function send_task_info ({ task_id, chat_id }) {
   } catch (e) {
     console.log('fail to send message to tg', e.message)
   }
-  // get_task_info 在task目录数超大时比较吃cpu，以后如果最好把mapping也另存一张表
+  // get_task_info 在task目錄數超大時比較吃cpu，以後如果最好把mapping也另存一張表
   if (!message_id || status !== 'copying') return
   const loop = setInterval(async () => {
     const { text, status } = await get_task_info(task_id)
@@ -235,33 +235,33 @@ async function send_task_info ({ task_id, chat_id }) {
 
 async function tg_copy ({ fid, target, chat_id, update }) { // return task_id
   target = target || DEFAULT_TARGET
-  if (!target) return sm({ chat_id, text: '请输入目的地ID或先在config.js里设置默认复制目的地ID(DEFAULT_TARGET)' })
+  if (!target) return sm({ chat_id, text: '請輸入目的地ID或先在config.js裡設置默認複製目的地ID(DEFAULT_TARGET)' })
 
   const file = await get_info_by_id(fid, !USE_PERSONAL_AUTH)
   if (!file) {
-    const text = `无法获取对象信息，请检查链接是否有效且SA拥有相应的权限：https://drive.google.com/drive/folders/${fid}`
+    const text = `無法獲取對象訊息，請檢查連結是否有效且SA擁有相應的權限：https://drive.google.com/drive/folders/${fid}`
     return sm({ chat_id, text })
   }
   if (file && file.mimeType !== 'application/vnd.google-apps.folder') {
     return copy_file(fid, target, !USE_PERSONAL_AUTH).then(data => {
-      sm({ chat_id, parse_mode: 'HTML', text: `复制单文件成功，文件位置：${gen_link(target)}` })
+      sm({ chat_id, parse_mode: 'HTML', text: `複製單文件成功，文件位置：${gen_link(target)}` })
     }).catch(e => {
-      sm({ chat_id, text: `复制单文件失败，失败消息：${e.message}` })
+      sm({ chat_id, text: `複製單文件失敗，失敗消息：${e.message}` })
     })
   }
 
   let record = db.prepare('select id, status from task where source=? and target=?').get(fid, target)
   if (record) {
     if (record.status === 'copying') {
-      return sm({ chat_id, text: '已有相同源ID和目的ID的任务正在进行，查询进度可输入 /task ' + record.id })
+      return sm({ chat_id, text: '已有相同源ID和目的ID的任務正在進行，查詢進度可輸入 /task ' + record.id })
     } else if (record.status === 'finished') {
-      sm({ chat_id, text: `检测到已存在的任务 ${record.id}，开始继续拷贝` })
+      sm({ chat_id, text: `檢測到已存在的任務 ${record.id}，開始繼續複製` })
     }
   }
 
   real_copy({ source: fid, update, target, service_account: !USE_PERSONAL_AUTH, is_server: true })
     .then(async info => {
-      if (!record) record = {} // 防止无限循环
+      if (!record) record = {} // 防止無限循環
       if (!info) return
       const { task_id } = info
       const { text } = await get_task_info(task_id)
@@ -271,9 +271,9 @@ async function tg_copy ({ fid, target, chat_id, update }) { // return task_id
       const task_id = record && record.id
       if (task_id) db.prepare('update task set status=? where id=?').run('error', task_id)
       if (!record) record = {}
-      console.error('复制失败', fid, '-->', target)
+      console.error('複製失敗', fid, '-->', target)
       console.error(err)
-      sm({ chat_id, text: (task_id || '') + '任务出错，错误消息：' + err.message })
+      sm({ chat_id, text: (task_id || '') + '任務出錯，錯誤消息：' + err.message })
     })
 
   while (!record) {
@@ -293,7 +293,7 @@ function reply_cb_query ({ id, data }) {
   const url = `https://api.telegram.org/bot${tg_token}/answerCallbackQuery`
   return axins.post(url, {
     callback_query_id: id,
-    text: '开始执行 ' + data
+    text: '開始執行 ' + data
   })
 }
 
@@ -301,17 +301,17 @@ async function send_count ({ fid, chat_id, update }) {
   const gen_text = payload => {
     const { obj_count, processing_count, pending_count } = payload || {}
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
-    return `统计对象：${gen_link(fid)}
-更新时间：${now}
-对象数量：${obj_count || ''}
-${pending_count ? ('排队请求：' + pending_count) : ''}
-${processing_count ? ('进行请求：' + processing_count) : ''}`
+    return `統計對象：${gen_link(fid)}
+更新時間：${now}
+對象數量：${obj_count || ''}
+${pending_count ? ('排隊請求：' + pending_count) : ''}
+${processing_count ? ('進行請求：' + processing_count) : ''}`
   }
 
   const url = `https://api.telegram.org/bot${tg_token}/sendMessage`
   let response
   try {
-    response = await axins.post(url, { chat_id, text: `开始获取 ${fid} 所有文件信息，请稍后，建议统计完成前先不要开始复制，因为复制也需要先获取源文件夹信息` })
+    response = await axins.post(url, { chat_id, text: `開始獲取 ${fid} 所有文件訊息，請稍後，建議統計完成前先不要開始複製，因為複製也需要先獲取源文件夾訊息` })
   } catch (e) {}
   const { data } = response || {}
   const message_id = data && data.result && data.result.message_id
@@ -324,14 +324,14 @@ ${processing_count ? ('进行请求：' + processing_count) : ''}`
 
   const service_account = !USE_PERSONAL_AUTH
   const table = await gen_count_body({ fid, update, service_account, type: 'tg', tg: message_id && message_updater })
-  if (!table) return sm({ chat_id, parse_mode: 'HTML', text: gen_link(fid) + ' 信息获取失败' })
+  if (!table) return sm({ chat_id, parse_mode: 'HTML', text: gen_link(fid) + ' 訊息獲取失敗' })
   const gd_link = `https://drive.google.com/drive/folders/${fid}`
   const name = await get_folder_name(fid)
   return axins.post(url, {
     chat_id,
     parse_mode: 'HTML',
-    text: `<pre>源文件夹名称：${name}
-源链接：${gd_link}
+    text: `<pre>源文件夾名稱：${name}
+源連結：${gd_link}
 ${table}</pre>`
   }).catch(async err => {
     console.log(err.message)
@@ -343,9 +343,9 @@ ${table}</pre>`
     return sm({
       chat_id,
       parse_mode: 'HTML',
-      text: `<pre>源文件夹名称：${name}
-源链接：${gd_link}
-表格太长超出telegram消息限制，只显示前${limit}条：
+      text: `<pre>源文件夾名稱：${name}
+源連結：${gd_link}
+表格太長超出telegram消息限制，只顯示前${limit}條：
 ${table}</pre>`
     })
   })
