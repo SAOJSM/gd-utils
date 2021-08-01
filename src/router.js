@@ -71,10 +71,10 @@ router.post('/api/gdurl/tgbot', async ctx => {
         delete counting[fid]
       })
     } else if (action === 'copy') {
-      if (COPYING_FIDS[fid + target]) return sm({ chat_id, text: '正在處理相同源和目的地的覆制命令' })
+      if (COPYING_FIDS[fid + target]) return sm({ chat_id, text: '正在處理相同源和目的地的複製命令' })
       COPYING_FIDS[fid + target] = true
       tg_copy({ fid, target: get_target_by_alias(target), chat_id }).then(task_id => {
-        is_int(task_id) && sm({ chat_id, text: `開始覆制，任務ID: ${task_id} 可輸入 /task ${task_id} 查詢進度` })
+        is_int(task_id) && sm({ chat_id, text: `開始複製，任務ID: ${task_id} 可輸入 /task ${task_id} 查詢進度` })
       }).finally(() => COPYING_FIDS[fid + target] = false)
     } else if (action === 'update') {
       if (counting[fid]) return sm({ chat_id, text: fid + ' 正在統計，請稍等片刻' })
@@ -145,11 +145,11 @@ router.post('/api/gdurl/tgbot', async ctx => {
     let target = text.replace('/copy', '').replace(' -u', '').trim().split(' ').map(v => v.trim()).filter(v => v)[1]
     target = get_target_by_alias(target) || target
     if (target && !validate_fid(target)) return sm({ chat_id, text: `目標ID ${target} 格式不正確` })
-    if (COPYING_FIDS[fid + target]) return sm({ chat_id, text: '正在處理相同源和目的地的覆制命令' })
+    if (COPYING_FIDS[fid + target]) return sm({ chat_id, text: '正在處理相同源和目的地的複製命令' })
     COPYING_FIDS[fid + target] = true
     const update = text.endsWith(' -u')
     tg_copy({ fid, target, chat_id, update }).then(task_id => {
-      is_int(task_id) && sm({ chat_id, text: `開始覆制，任務ID: ${task_id} 可輸入 /task ${task_id} 查詢進度` })
+      is_int(task_id) && sm({ chat_id, text: `開始複製，任務ID: ${task_id} 可輸入 /task ${task_id} 查詢進度` })
     }).finally(() => COPYING_FIDS[fid + target] = false)
   } else if (text.startsWith('/task')) {
     let task_id = text.replace('/task', '').trim()
@@ -168,7 +168,7 @@ router.post('/api/gdurl/tgbot', async ctx => {
     task_id = parseInt(task_id)
     if (!task_id) {
       const running_tasks = db.prepare('select id from task where status=?').all('copying')
-      if (!running_tasks.length) return sm({ chat_id, text: '當前暫無運行中的任務' })
+      if (!running_tasks.length) return sm({ chat_id, text: '當前暫無執行中的任務' })
       return running_tasks.forEach(v => send_task_info({ chat_id, task_id: v.id }).catch(console.error))
     }
     send_task_info({ task_id, chat_id }).catch(console.error)
