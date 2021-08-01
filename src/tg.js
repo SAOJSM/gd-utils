@@ -28,41 +28,41 @@ function send_help (chat_id) {
 =====================
 /help | 使用說明
 =====================
-/reload | 重啟進程，中斷所有進行中的任務(前提是進程由pm2守護)
+/reload | 重啟程式，中斷所有進行中的任務(前提是程式由pm2守護)
 =====================
-/count shareID [-u] | 返回sourceID的文件統計訊息
+/count shareID [-u] | 查詢sourceID的文件統計訊息
 sourceID可以是google drive分享網址本身，也可以是分享ID。如果命令最後加上 -u，則無視之前的記錄強制從線上獲取，適合一段時候後才更新完畢的分享連結。
 =====================
 /copy sourceID targetID [-u] | 將sourceID的文件複製到targetID裡（會新建一個文件夾）
-若不填targetID，則會複製到默認位置（在config.js裡設置）。
+若不填targetID，則會複製到預設位置（在config.js裡設置）。
 如果設置了bookmark，那麽targetID可以是bookmark的別名。
-如果命令最後加上 -u，則無視本地緩存強制從線上獲取源文件夾訊息。
+如果命令最後加上 -u，則無視本地暫存強制從線上獲取源文件夾訊息。
 命令開始執行後會回覆此次任務的taskID。
 =====================
-/task | 返回對應任務的進度訊息
-用例：
-/task | 返回所有正在執行的任務詳情
-/task 7 | 返回編號為 7 的任務詳情
-/task all | 返回所有任務記錄列表
+/task | 查詢對應任務的進度訊息
+範例：
+/task | 查詢所有正在執行的任務詳情
+/task 7 | 查詢編號為 7 的任務詳情
+/task all | 查詢所有任務記錄列表
 /task clear | 清除所有狀態為已完成的任務記錄
 /task rm 7 | 刪除編號為 7 的任務記錄
 =====================
-/bm [action] [alias] [target] | bookmark，添加常用目的文件夾ID
-會在輸入網址後返回的「文件統計」「開始複製」這兩個按鈕的下方出現，方便複製到常用位置。
-用例：
-/bm | 返回所有設置的收藏夾
-/bm set movie folder-id | 將folder-id添加到收藏夾，別名設為movie
+/bm [action] [alias] [target] | bookmark，新增常用目的文件夾ID
+會在輸入網址後查詢的「文件統計」「開始複製」這兩個按鈕的下方出現，方便複製到常用位置。
+範例：
+/bm | 查詢所有設置的收藏夾
+/bm set movie folder-id | 將folder-id新增到收藏夾，別名設為movie
 /bm unset movie | 刪除此收藏夾
 </pre>`
   return sm({ chat_id, text, parse_mode: 'HTML' })
 }
 
 function send_bm_help (chat_id) {
-  const text = `<pre>/bm [action] [alias] [target] | bookmark，添加常用目的文件夾ID
-會在輸入網址後返回的「文件統計」「開始複製」這兩個按鈕的下方出現，方便複製到常用位置。
-用例：
-/bm | 返回所有設置的收藏夾
-/bm set movie folder-id | 將folder-id添加到收藏夾，別名設為movie
+  const text = `<pre>/bm [action] [alias] [target] | bookmark，新增常用目的文件夾ID
+會在輸入網址後查詢的「文件統計」「開始複製」這兩個按鈕的下方出現，方便複製到常用位置。
+範例：
+/bm | 查詢所有設置的收藏夾
+/bm set movie folder-id | 將folder-id新增到收藏夾，別名設為movie
 /bm unset movie | 刪除此收藏夾
 </pre>`
   return sm({ chat_id, text, parse_mode: 'HTML' })
@@ -70,10 +70,10 @@ function send_bm_help (chat_id) {
 
 function send_task_help (chat_id) {
   const text = `<pre>/task [action/id] [id] | 查詢或管理任務進度
-用例：
-/task | 返回所有正在執行的任務詳情
-/task 7 | 返回編號為 7 的任務詳情
-/task all | 返回所有任務記錄列表
+範例：
+/task | 查詢所有正在執行的任務詳情
+/task 7 | 查詢編號為 7 的任務詳情
+/task all | 查詢所有任務記錄列表
 /task clear | 清除所有狀態為已完成的任務記錄
 /task rm 7 | 刪除編號為 7 的任務記錄
 </pre>`
@@ -235,7 +235,7 @@ async function send_task_info ({ task_id, chat_id }) {
 
 async function tg_copy ({ fid, target, chat_id, update }) { // return task_id
   target = target || DEFAULT_TARGET
-  if (!target) return sm({ chat_id, text: '請輸入目的地ID或先在config.js裡設置默認複製目的地ID(DEFAULT_TARGET)' })
+  if (!target) return sm({ chat_id, text: '請輸入目的地ID或先在config.js裡設置預設複製目的地ID(DEFAULT_TARGET)' })
 
   const file = await get_info_by_id(fid, !USE_PERSONAL_AUTH)
   if (!file) {
