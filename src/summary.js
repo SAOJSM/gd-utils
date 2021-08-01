@@ -57,7 +57,7 @@ function make_tg_table ({ file_count, folder_count, total_size, details }, limit
   const headers = ['Type', 'Count', 'Size'].map(v => ({ content: v, hAlign }))
   details.forEach(v => {
     if (v.ext === '文件夾') v.ext = '[Folder]'
-    if (v.ext === '無擴展名') v.ext = '[NoExt]'
+    if (v.ext === '無副檔名') v.ext = '[NoExt]'
   })
   let records = details.map(v => [v.ext, v.count, v.size]).map(arr => arr.map(content => ({ content, hAlign })))
   const folder_row = records.pop()
@@ -83,7 +83,7 @@ function summary (info, sort_by) {
     let { name, size } = v
     size = Number(size) || 0
     const ext = name.split('.').pop().toLowerCase()
-    if (!name.includes('.') || ext.length > 10) { // 若 . 後超過10字符，判斷為無擴展名
+    if (!name.includes('.') || ext.length > 10) { // 若 . 後超過10字符，判斷為無副檔名
       no_ext_size += size
       return no_ext++
     }
@@ -110,7 +110,7 @@ function summary (info, sort_by) {
   } else {
     details.sort((a, b) => b.count - a.count)
   }
-  if (no_ext) details.push({ ext: '無擴展名', count: no_ext, size: format_size(no_ext_size), raw_size: no_ext_size })
+  if (no_ext) details.push({ ext: '無副檔名', count: no_ext, size: format_size(no_ext_size), raw_size: no_ext_size })
   if (folder_count) details.push({ ext: '文件夾', count: folder_count, size: 0, raw_size: 0 })
   return { file_count, folder_count, total_size, details }
 }
